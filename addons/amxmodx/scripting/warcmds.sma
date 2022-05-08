@@ -13,6 +13,8 @@ public plugin_init()
 	register_clcmd("say .warm","say_warm",ACCESS)
 	register_clcmd("say .live","say_live",ACCESS)
 	register_clcmd("say .lame","say_lame",ACCESS)
+	register_clcmd("say .alegeri","say_alegeri",ACCESS)
+    
 }
 
 public say_restart(id) 
@@ -51,6 +53,7 @@ public say_live(id)
 	server_cmd("mp_freezetime 10")
 	server_cmd("mp_friendlyfire 1")
 	server_cmd("sv_restart 1")
+        client_cmd(0,"rate 25000;cl_cmdrate 101;cl_updaterate 101;ex_interp 0.01")
 
 	client_print(0, print_chat, "[ WarCmds ] Meciul a inceput!")
 	client_print(0, print_chat, "[ WarCmds ] Mult noroc tuturor!")
@@ -74,3 +77,15 @@ public say_lame(id)
 
 }
 
+public say_alegeri(id)
+{
+	if(!(get_user_flags(id) & ACCESS))
+		return
+
+	server_cmd("sv_restart 1")    
+        client_cmd(0,"kill;wait;jointeam 6")
+	
+        client_print(0, print_chat, "[ WarCmds ] Alegeri! Alegeri! Alegeri!")
+
+
+}
