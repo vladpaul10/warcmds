@@ -73,7 +73,7 @@ public tagtt( id, level, cid )
 	if (read_argc() < 2) 
 	{
 		console_print(id,"[ WarCmds ] Usage: amx_tagt < Tag T >")
-		console_print(id,"[ WarCmds ] Tagul echipei CT este: %s", tagt)
+		console_print(id,"[ WarCmds ] Tagul echipei T este: %s", tagt)
 		return PLUGIN_HANDLED;
 	} 
         new tagttt[32];
@@ -184,6 +184,16 @@ public say_warm(id)
 		server_cmd("sv_restart 1")
 		return PLUGIN_HANDLED;
 	}
+	if(g_on == 1)
+	{
+		client_print(id, print_chat, "[ WarCmds ] Meci in desfasurare! Pentru a opri meciul foloseste comanda /stop")		
+		return PLUGIN_HANDLED;
+	}
+	if(pauza == 1)
+	{
+		client_print(id, print_chat, "[ WarCmds ] Meci in desfasurare! Pentru a opri meciul foloseste comanda /stop")		
+		return PLUGIN_HANDLED;
+	}
 	if(livem == 1)
 	{
 		return PLUGIN_HANDLED;
@@ -273,6 +283,16 @@ public say_lame(id)
 {
 	if(!(get_user_flags(id) & ACCESS))
 		return PLUGIN_HANDLED;
+	if(g_on == 1)
+	{
+		client_print(id, print_chat, "[ WarCmds ] Meci in desfasurare! Pentru a opri meciul foloseste comanda /stop")		
+		return PLUGIN_HANDLED;
+	}
+	if(pauza == 1)
+	{
+		client_print(id, print_chat, "[ WarCmds ] Meci in desfasurare! Pentru a opri meciul foloseste comanda /stop")		
+		return PLUGIN_HANDLED;
+	}
 	if(livem == 1)
 	{
 		return PLUGIN_HANDLED;
@@ -303,13 +323,30 @@ public say_alegeri(id)
 {
 	if(!(get_user_flags(id) & ACCESS))
 		return PLUGIN_HANDLED;
+	if(g_on == 1)
+	{
+		client_print(id, print_chat, "[ WarCmds ] Meci in desfasurare! Pentru a opri meciul foloseste comanda /stop")		
+		return PLUGIN_HANDLED;
+	}
+	if(pauza == 1)
+	{
+		client_print(id, print_chat, "[ WarCmds ] Meci in desfasurare! Pentru a opri meciul foloseste comanda /stop")		
+		return PLUGIN_HANDLED;
+	}
 	if(livem == 1)
 	{
 		return PLUGIN_HANDLED;
 	}
 
-	server_cmd("sv_restart 1")    
-        client_cmd(0,"kill;wait;jointeam 6")
+	server_cmd("sv_restart 1");    
+     	new Players[32], Num, iPlr, i;
+	get_players(Players, Num, "c");
+	for (i=0;i<Num;i++)
+	{
+		iPlr=Players[i];
+		user_kill(iPlr);
+		client_cmd(iPlr,"jointeam 6");
+	}	
         g_on = 0;
 	warm = 0;
 	fhalf = 0;
@@ -320,40 +357,46 @@ public say_alegeri(id)
 	sctcount = 0;
 	stcount = 0;
 	
-        client_print(0, print_chat, "[ WarCmds ] Alegeri! Alegeri! Alegeri!")
+        client_print(0, print_chat, "[ WarCmds ] Alegeri! Alegeri! Alegeri!");
 
 	return PLUGIN_HANDLED;
 }
 
 public t_win(id) 
-{ 
-	if(fhalf == 1)
 {
-	tcount++;
-}
-	if(shalf == 1) 
-{
-	stcount++;
-}
+	if(fhalf != 2)
+	{
+		if(fhalf == 1)
+		{
+			tcount++;
+		}
+		if(shalf == 1) 
+		{
+			stcount++;
+		}
+	}
 } 
 
 public ct_win(id) 
 { 
-	if(fhalf == 1)
-{
-	ctcount++;
-}
-	if(shalf == 1)
-{
-	sctcount++;
-}
+	if(fhalf != 2)
+	{	
+		if(fhalf == 1)
+		{
+			ctcount++;
+		}
+		if(shalf == 1)
+		{
+			sctcount++;
+		}
+	}
 } 
 
 public new_round()
 {       
 	ftcount = ctcount + stcount;
 	fctcount = tcount + sctcount;
-	client_cmd(0,"rate 25000;cl_cmdrate 101;cl_updaterate 101;fps_max 101;fps_modem 101;ex_interp 0.01");
+	client_cmd(0,"rate 25000;cl_cmdrate 101;cl_updaterate 101;fps_max 99.5;ex_interp 0.01");
      	if(g_on == 1)
 	{
     		suma++;
@@ -367,7 +410,7 @@ public new_round()
 			}
     			if(suma == 15)
 			{
-			client_print(0, print_chat, "[ WarCmds ] Dupa aceasta runda echipele se vor schimba automat! Plugin by WarCmds MIX");
+			client_print(0, print_chat, "[ WarCmds ] Dupa aceasta runda echipele se vor schimba automat! Plugin by GamesZone MIX");
 			}
 		
 			if(suma == 16)
