@@ -19,19 +19,21 @@ new tagct[32] = "<B>";
 new tagt[32] = "<A>";
 new ttagct[32] = "<B>";
 new ttagt[32] = "<A>";
+new livem = 0;
+
 
 public plugin_init() 
 {
-	register_plugin("warcmds","2.5","VisioN")
-	register_clcmd("say .rr","say_restart",ACCESS)
-	register_clcmd("say .restart","say_restart",ACCESS)
-	register_clcmd("say .warm","say_warm",ACCESS)
-	register_clcmd("say .live","say_live",ACCESS)
-	register_clcmd("say .lame","say_lame",ACCESS)
-	register_clcmd("say .alegeri","say_alegeri",ACCESS)
-	register_clcmd("say .stop","say_stop",ACCESS)
-	register_clcmd("say .scor","say_score")
-	register_clcmd("say .score","say_score")
+	register_plugin("warcmds","2.7","VisioN")
+	register_clcmd("say /rr","say_restart",ACCESS)
+	register_clcmd("say /restart","say_restart",ACCESS)
+	register_clcmd("say /warm","say_warm",ACCESS)
+	register_clcmd("say /live","say_live",ACCESS)
+	register_clcmd("say /lame","say_lame",ACCESS)
+	register_clcmd("say /alegeri","say_alegeri",ACCESS)
+	register_clcmd("say /stop","say_stop",ACCESS)
+	register_clcmd("say /scor","say_score")
+	register_clcmd("say /score","say_score")
 	
 	register_concmd("amx_tagct", "tagctt", ACCESS, "<Tagct> - CT Tag");
 	register_concmd("amx_tagt", "tagtt", ACCESS, "<Tagt> - T Tag");
@@ -47,7 +49,13 @@ public tagctt( id, level, cid )
 { 
 
 	if(!(get_user_flags(id) & ACCESS))
-		return PLUGIN_HANDLED;    
+		return PLUGIN_HANDLED;
+	if (read_argc() < 2) 
+	{
+		console_print(id,"[ WarCmds ] Usage: amx_tagct < Tag CT >")
+		console_print(id,"[ WarCmds ] Tagul echipei CT este: %s", tagct)
+		return PLUGIN_HANDLED;
+	}    
         new tagcttt[32];
     	read_argv(1, tagcttt, 31);
 	copy(tagct, 31, tagcttt);
@@ -61,7 +69,13 @@ public tagtt( id, level, cid )
 { 
 
 	if(!(get_user_flags(id) & ACCESS))
-		return PLUGIN_HANDLED; 
+		return PLUGIN_HANDLED;
+	if (read_argc() < 2) 
+	{
+		console_print(id,"[ WarCmds ] Usage: amx_tagt < Tag T >")
+		console_print(id,"[ WarCmds ] Tagul echipei CT este: %s", tagt)
+		return PLUGIN_HANDLED;
+	} 
         new tagttt[32];
 	read_argv(1, tagttt, 31); 
 	copy(tagt, 31, tagttt)
@@ -77,31 +91,39 @@ public say_restart(id)
 		return
      
 	server_cmd("sv_restart 1")
-        if(fhalf == 1)
-{
-        suma = 0;
-        tcount = 0;
-        ctcount = 0;
-        set_task(0.5, "mesaj1");
-	set_task(1.0, "mesaj2");
-	set_task(2.0, "mesaj3");
-	set_task(3.0, "mesaj4");
-	set_task(3.0, "mesaj12");
-	set_task(4.0, "mesaj5");
-	set_task(4.5, "mesaj6");
-}
-        if(shalf == 1)
-{
-        suma = 16;
-	sctcount = 0;
-	stcount = 0;
-	set_task(0.5, "mesaj7");
-	set_task(1.0, "mesaj8");
-	set_task(2.0, "mesaj9");
-	set_task(3.0, "mesaj13");
-	set_task(3.0, "mesaj10");
-	set_task(4.0, "mesaj11");
-}
+        
+	if(livem == 0)
+	{
+		if(fhalf == 1)
+		{	
+		livem = 1;
+        	suma = 0;
+       		tcount = 0;
+        	ctcount = 0;
+        	set_task(0.5, "mesaj1");
+		set_task(1.0, "mesaj2");
+		set_task(2.0, "mesaj3");
+		set_task(3.0, "mesaj4");
+		set_task(3.0, "mesaj12");
+		set_task(4.0, "mesaj5");
+		set_task(4.5, "mesaj6");
+		set_task(5.0, "mesaj14");
+		}
+        	if(shalf == 1)
+		{
+		livem = 1;
+        	suma = 16;
+		sctcount = 0;
+		stcount = 0;
+		set_task(0.5, "mesaj7");
+		set_task(1.0, "mesaj8");
+		set_task(2.0, "mesaj9");
+		set_task(3.0, "mesaj13");
+		set_task(3.0, "mesaj10");
+		set_task(4.0, "mesaj11");
+		set_task(4.5, "mesaj14");
+		}
+	}
 }
 
 public say_stop(id) 
@@ -156,7 +178,16 @@ public say_stop(id)
 public say_warm(id) 
 {
 	if(!(get_user_flags(id) & ACCESS))
-		return
+		return PLUGIN_HANDLED;
+	if(fhalf == 2)
+	{
+		server_cmd("sv_restart 1")
+		return PLUGIN_HANDLED;
+	}
+	if(livem == 1)
+	{
+		return PLUGIN_HANDLED;
+	}
     
 	server_cmd("mp_freezetime 0") 
 	server_cmd("mp_startmoney 16000")
@@ -165,6 +196,7 @@ public say_warm(id)
 	server_cmd("sv_restart 1")
         g_on = 0;
 	warm = 0;
+	fhalf = 0;
 	shalf = 0;
 	tcount = 0;
 	ctcount = 0;
@@ -172,6 +204,8 @@ public say_warm(id)
 	sctcount = 0;
 	stcount = 0;
 	client_print(0, print_chat, "[ WarCmds ] Runda de incalzire a inceput!")
+	
+	return PLUGIN_HANDLED;
 
 }
 
@@ -179,61 +213,70 @@ public say_live(id)
 {
 	if(!(get_user_flags(id) & ACCESS))
 		return
+        if(livem == 0)
+	{
+        	g_on = 1;
+        	if(fhalf == 0)
+		{
+		livem = 1;
+        	suma = 0;
+        	tcount = 0;
+        	ctcount = 0;
+        	fhalf = 1;
+		server_cmd("mp_fadetoblack 0") 
+		server_cmd("mp_maxrounds 0")
+		server_cmd("mp_roundtime 1.75")
+		server_cmd("mp_startmoney 800")
+		server_cmd("mp_freezetime 10")
+		server_cmd("mp_friendlyfire 1")
+		server_cmd("sv_restart 1")
+        	client_cmd(0,"rate 25000;cl_cmdrate 101;cl_updaterate 101;ex_interp 0.01")
+
+        	set_task(0.5, "mesaj1");
+		set_task(1.0, "mesaj2");
+		set_task(2.0, "mesaj3");
+		set_task(3.0, "mesaj4");
+		set_task(3.0, "mesaj12");
+		set_task(4.0, "mesaj5");
+		set_task(4.5, "mesaj6");
+		set_task(5.0, "mesaj14");
+		}
+        	if(fhalf == 2)
+		{
+		livem = 1;
+		server_cmd("mp_fadetoblack 0") 
+		server_cmd("mp_maxrounds 0")
+		server_cmd("mp_roundtime 1.75")
+		server_cmd("mp_startmoney 800")
+		server_cmd("mp_freezetime 10")
+		server_cmd("mp_friendlyfire 1")
+		server_cmd("sv_restart 1")
+        	client_cmd(0,"rate 25000;cl_cmdrate 101;cl_updaterate 101;ex_interp 0.01")
+
+		set_task(0.5, "mesaj7");
+		set_task(1.0, "mesaj8");
+		set_task(2.0, "mesaj9");
+		set_task(3.0, "mesaj13");
+		set_task(3.0, "mesaj10");
+		set_task(4.0, "mesaj11");
+		set_task(4.5, "mesaj14");
+        	shalf = 1;
+        	warm = 0;
+        	fhalf = 3;
+        	suma = 15;
+		}
+	}	
         
-        g_on = 1;
-        if(fhalf == 0)
-{
-        suma = 0;
-        tcount = 0;
-        ctcount = 0;
-        fhalf = 1;
-	server_cmd("mp_fadetoblack 0") 
-	server_cmd("mp_maxrounds 0")
-	server_cmd("mp_roundtime 1.75")
-	server_cmd("mp_startmoney 800")
-	server_cmd("mp_freezetime 10")
-	server_cmd("mp_friendlyfire 1")
-	server_cmd("sv_restart 1")
-        client_cmd(0,"rate 25000;cl_cmdrate 101;cl_updaterate 101;ex_interp 0.01")
-
-        set_task(0.5, "mesaj1");
-	set_task(1.0, "mesaj2");
-	set_task(2.0, "mesaj3");
-	set_task(3.0, "mesaj4");
-	set_task(3.0, "mesaj12");
-	set_task(4.0, "mesaj5");
-	set_task(4.5, "mesaj6");
-}
-        if(fhalf == 2)
-{
-	server_cmd("mp_fadetoblack 0") 
-	server_cmd("mp_maxrounds 0")
-	server_cmd("mp_roundtime 1.75")
-	server_cmd("mp_startmoney 800")
-	server_cmd("mp_freezetime 10")
-	server_cmd("mp_friendlyfire 1")
-	server_cmd("sv_restart 1")
-        client_cmd(0,"rate 25000;cl_cmdrate 101;cl_updaterate 101;ex_interp 0.01")
-
-	set_task(0.5, "mesaj7");
-	set_task(1.0, "mesaj8");
-	set_task(2.0, "mesaj9");
-	set_task(3.0, "mesaj13");
-	set_task(3.0, "mesaj10");
-	set_task(4.0, "mesaj11");
-        shalf = 1;
-        warm = 0;
-        fhalf = 3;
-        suma = 15;
-}
-        
-
 }
 
 public say_lame(id) 
 {
 	if(!(get_user_flags(id) & ACCESS))
-		return
+		return PLUGIN_HANDLED;
+	if(livem == 1)
+	{
+		return PLUGIN_HANDLED;
+	}
     
 	server_cmd("mp_fadetoblack 0") 
 	server_cmd("mp_maxrounds 0")
@@ -253,13 +296,17 @@ public say_lame(id)
          
 	client_print(0, print_chat, "[ WarCmds ] Runda de lame a inceput!")
 	client_print(0, print_chat, "[ WarCmds ] Aruncati armele in baza!")
-
+	return PLUGIN_HANDLED;
 }
 
 public say_alegeri(id)
 {
 	if(!(get_user_flags(id) & ACCESS))
-		return
+		return PLUGIN_HANDLED;
+	if(livem == 1)
+	{
+		return PLUGIN_HANDLED;
+	}
 
 	server_cmd("sv_restart 1")    
         client_cmd(0,"kill;wait;jointeam 6")
@@ -275,7 +322,7 @@ public say_alegeri(id)
 	
         client_print(0, print_chat, "[ WarCmds ] Alegeri! Alegeri! Alegeri!")
 
-
+	return PLUGIN_HANDLED;
 }
 
 public t_win(id) 
@@ -309,18 +356,18 @@ public new_round()
 	client_cmd(0,"rate 25000;cl_cmdrate 101;cl_updaterate 101;fps_max 101;fps_modem 101;ex_interp 0.01");
      	if(g_on == 1)
 	{
-    	suma++;
+    		suma++;
     		if(fhalf == 1)
 		{       if(suma > 1)
 			{
-				if(suma < 16)
+				if((suma < 16)&&(livem == 0))
 				{
 				client_print(0, print_chat, "[ WarCmds ] Scorul este %s: %d %s: %d", tagct, ctcount, tagt, tcount);
 				}
 			}
     			if(suma == 15)
 			{
-			client_print(0, print_chat, "[ WarCmds ] Dupa aceasta runda echipele se vor schimba automat!");
+			client_print(0, print_chat, "[ WarCmds ] Dupa aceasta runda echipele se vor schimba automat! Plugin by WarCmds MIX");
 			}
 		
 			if(suma == 16)
@@ -352,14 +399,36 @@ public new_round()
 
 
 		if(shalf == 1)
-		{       if(suma > 17)
+		{	
+		        if((suma > 17)&&(livem == 0))
 			{
 			client_print(0, print_chat, "[ WarCmds ] Scorul este %s: %d %s: %d", tagt, fctcount, tagct, ftcount);
 			}
                         pauza = 0
+			if(fctcount == 15)
+			{
+				if(ftcount == 15)
+				{			
+				client_print(0, print_chat, "[ WarCmds ] Egal %s vs %s", tagt, tagct);
+				set_task(0.5, "mesaj15");
+				copy(tagct, 31, ttagct)
+				copy(tagt, 31, ttagt)
+        			g_on = 0;
+				warm = 0;
+				fhalf = 0;
+				shalf = 0;
+				tcount = 0;
+				ctcount = 0;
+				suma = 0;
+				sctcount = 0;
+				stcount = 0;
+				}
+			}
+	
 			if(fctcount == 16)
 			{
 			client_print(0, print_chat, "[ WarCmds ] Echipa %s a castigat!", tagt);
+			set_task(0.5, "mesaj15");
 			copy(tagct, 31, ttagct)
 			copy(tagt, 31, ttagt)
         		g_on = 0;
@@ -376,6 +445,7 @@ public new_round()
 			if(ftcount == 16)
 			{
 			client_print(0, print_chat, "[ WarCmds ] Echipa %s a castigat!", tagct);
+			set_task(0.5, "mesaj15");
 			copy(tagct, 31, ttagct)
 			copy(tagt, 31, ttagt)
         		g_on = 0;
@@ -476,4 +546,12 @@ public mesaj13()
 {       
 	suma = 16;
 	server_cmd("sv_restart 1")      
+}
+public mesaj14() 
+{       
+	livem = 0;    
+}
+public mesaj15() 
+{       
+	client_cmd(0,"snapshot");    
 }
