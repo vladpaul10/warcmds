@@ -24,7 +24,7 @@ new livem = 0;
 
 public plugin_init() 
 {
-	register_plugin("warcmds","2.7","VisioN")
+	register_plugin("warcmds","3.0","vladpaul10")
 	register_clcmd("say /rr","say_restart",ACCESS)
 	register_clcmd("say /restart","say_restart",ACCESS)
 	register_clcmd("say /warm","say_warm",ACCESS)
@@ -32,7 +32,6 @@ public plugin_init()
 	register_clcmd("say /blades","say_blades",ACCESS)
 	register_clcmd("say /elections","say_elections",ACCESS)
 	register_clcmd("say /stop","say_stop",ACCESS)
-	register_clcmd("say /scor","say_score")
 	register_clcmd("say /score","say_score")
 	
 	register_concmd("amx_tagct", "tagctt", ACCESS, "<Tagct> - CT Tag");
