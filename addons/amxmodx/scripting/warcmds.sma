@@ -5,12 +5,12 @@
 #define ACCESS ADMIN_SLAY
 new tcount = 0;
 new ctcount = 0;
-new suma = 0;
+new sum = 0;
 new fhalf = 0;
 new shalf = 0;
 new warm = 0;
 new g_on = 0;
-new pauza = 0;
+new gameBreak = 0;
 new sctcount = 0;
 new stcount = 0;
 new ftcount;
@@ -29,8 +29,8 @@ public plugin_init()
 	register_clcmd("say /restart","say_restart",ACCESS)
 	register_clcmd("say /warm","say_warm",ACCESS)
 	register_clcmd("say /live","say_live",ACCESS)
-	register_clcmd("say /lame","say_lame",ACCESS)
-	register_clcmd("say /alegeri","say_alegeri",ACCESS)
+	register_clcmd("say /blades","say_blades",ACCESS)
+	register_clcmd("say /elections","say_elections",ACCESS)
 	register_clcmd("say /stop","say_stop",ACCESS)
 	register_clcmd("say /scor","say_score")
 	register_clcmd("say /score","say_score")
@@ -53,14 +53,14 @@ public tagctt( id, level, cid )
 	if (read_argc() < 2) 
 	{
 		console_print(id,"[ WarCmds ] Usage: amx_tagct < Tag CT >")
-		console_print(id,"[ WarCmds ] Tagul echipei CT este: %s", tagct)
+		console_print(id,"[ WarCmds ] CT team tag is %s", tagct)
 		return PLUGIN_HANDLED;
 	}    
         new tagcttt[32];
     	read_argv(1, tagcttt, 31);
 	copy(tagct, 31, tagcttt);
 	remove_quotes(tagcttt);
-	console_print(id, "Tag from CT team is  %s", tagcttt) 
+	console_print(id, "CT team tag is %s", tagcttt) 
 
 	return PLUGIN_HANDLED
 } 
@@ -73,14 +73,14 @@ public tagtt( id, level, cid )
 	if (read_argc() < 2) 
 	{
 		console_print(id,"[ WarCmds ] Usage: amx_tagt < Tag T >")
-		console_print(id,"[ WarCmds ] Tagul echipei T este: %s", tagt)
+		console_print(id,"[ WarCmds ] T team tag is: %s", tagt)
 		return PLUGIN_HANDLED;
 	} 
         new tagttt[32];
 	read_argv(1, tagttt, 31); 
 	copy(tagt, 31, tagttt)
         remove_quotes(tagttt); 
-	console_print(id, "Tag from T team is %s", tagttt) 
+	console_print(id, "T team tag is %s", tagttt) 
 		
 	return PLUGIN_HANDLED
 }
@@ -97,31 +97,31 @@ public say_restart(id)
 		if(fhalf == 1)
 		{	
 		livem = 1;
-        	suma = 0;
+        	sum = 0;
        		tcount = 0;
         	ctcount = 0;
-        	set_task(0.5, "mesaj1");
-		set_task(1.0, "mesaj2");
-		set_task(2.0, "mesaj3");
-		set_task(3.0, "mesaj4");
-		set_task(3.0, "mesaj12");
-		set_task(4.0, "mesaj5");
-		set_task(4.5, "mesaj6");
-		set_task(5.0, "mesaj14");
+        	set_task(0.5, "msg1");
+		set_task(1.0, "msg2");
+		set_task(2.0, "msg3");
+		set_task(3.0, "msg4");
+		set_task(3.0, "msg12");
+		set_task(4.0, "msg5");
+		set_task(4.5, "msg6");
+		set_task(5.0, "msg14");
 		}
         	if(shalf == 1)
 		{
 		livem = 1;
-        	suma = 16;
+        	sum = 16;
 		sctcount = 0;
 		stcount = 0;
-		set_task(0.5, "mesaj7");
-		set_task(1.0, "mesaj8");
-		set_task(2.0, "mesaj9");
-		set_task(3.0, "mesaj13");
-		set_task(3.0, "mesaj10");
-		set_task(4.0, "mesaj11");
-		set_task(4.5, "mesaj14");
+		set_task(0.5, "msg7");
+		set_task(1.0, "msg8");
+		set_task(2.0, "msg9");
+		set_task(3.0, "msg13");
+		set_task(3.0, "msg10");
+		set_task(4.0, "msg11");
+		set_task(4.5, "msg14");
 		}
 	}
 }
@@ -143,13 +143,13 @@ public say_stop(id)
 	shalf = 0;
 	tcount = 0;
 	ctcount = 0;
-	suma = 0;
+	sum = 0;
 	sctcount = 0;
 	stcount = 0;
 	copy(tagct, 31, ttagct)
 	copy(tagt, 31, ttagt)
 
-	client_print(0, print_chat, "[ WarCmds ] Meciul a fost oprit!")
+	client_print(0, print_chat, "[ WarCmds ] The match has been stopped!")
         }
         if(fhalf == 2)
 	{
@@ -164,13 +164,13 @@ public say_stop(id)
 	shalf = 0;
 	tcount = 0;
 	ctcount = 0;
-	suma = 0;
+	sum = 0;
 	sctcount = 0;
 	stcount = 0;
 	copy(tagct, 31, ttagct)
 	copy(tagt, 31, ttagt)
 
-	client_print(0, print_chat, "[ WarCmds ] Meciul a fost oprit!")
+	client_print(0, print_chat, "[ WarCmds ] The match has been stopped!")
         }
 
 }
@@ -186,12 +186,12 @@ public say_warm(id)
 	}
 	if(g_on == 1)
 	{
-		client_print(id, print_chat, "[ WarCmds ] Meci in desfasurare! Pentru a opri meciul foloseste comanda /stop")		
+		client_print(id, print_chat, "[ WarCmds ] Match in progress! To stop the match use the command /stop")		
 		return PLUGIN_HANDLED;
 	}
-	if(pauza == 1)
+	if(gameBreak == 1)
 	{
-		client_print(id, print_chat, "[ WarCmds ] Meci in desfasurare! Pentru a opri meciul foloseste comanda /stop")		
+		client_print(id, print_chat, "[ WarCmds ] Match in progress! To stop the match use the command / stop")		
 		return PLUGIN_HANDLED;
 	}
 	if(livem == 1)
@@ -210,10 +210,10 @@ public say_warm(id)
 	shalf = 0;
 	tcount = 0;
 	ctcount = 0;
-	suma = 0;
+	sum = 0;
 	sctcount = 0;
 	stcount = 0;
-	client_print(0, print_chat, "[ WarCmds ] Runda de incalzire a inceput!")
+	client_print(0, print_chat, "[ WarCmds ] The warm-up round has begun!")
 	
 	return PLUGIN_HANDLED;
 
@@ -229,7 +229,7 @@ public say_live(id)
         	if(fhalf == 0)
 		{
 		livem = 1;
-        	suma = 0;
+        	sum = 0;
         	tcount = 0;
         	ctcount = 0;
         	fhalf = 1;
@@ -242,14 +242,14 @@ public say_live(id)
 		server_cmd("sv_restart 1")
         	client_cmd(0,"rate 25000;cl_cmdrate 101;cl_updaterate 101;ex_interp 0.01")
 
-        	set_task(0.5, "mesaj1");
-		set_task(1.0, "mesaj2");
-		set_task(2.0, "mesaj3");
-		set_task(3.0, "mesaj4");
-		set_task(3.0, "mesaj12");
-		set_task(4.0, "mesaj5");
-		set_task(4.5, "mesaj6");
-		set_task(5.0, "mesaj14");
+        	set_task(0.5, "msg1");
+		set_task(1.0, "msg2");
+		set_task(2.0, "msg3");
+		set_task(3.0, "msg4");
+		set_task(3.0, "msg12");
+		set_task(4.0, "msg5");
+		set_task(4.5, "msg6");
+		set_task(5.0, "msg14");
 		}
         	if(fhalf == 2)
 		{
@@ -263,34 +263,34 @@ public say_live(id)
 		server_cmd("sv_restart 1")
         	client_cmd(0,"rate 25000;cl_cmdrate 101;cl_updaterate 101;ex_interp 0.01")
 
-		set_task(0.5, "mesaj7");
-		set_task(1.0, "mesaj8");
-		set_task(2.0, "mesaj9");
-		set_task(3.0, "mesaj13");
-		set_task(3.0, "mesaj10");
-		set_task(4.0, "mesaj11");
-		set_task(4.5, "mesaj14");
+		set_task(0.5, "msg7");
+		set_task(1.0, "msg8");
+		set_task(2.0, "msg9");
+		set_task(3.0, "msg13");
+		set_task(3.0, "msg10");
+		set_task(4.0, "msg11");
+		set_task(4.5, "msg14");
         	shalf = 1;
         	warm = 0;
         	fhalf = 3;
-        	suma = 15;
+        	sum = 15;
 		}
 	}	
         
 }
 
-public say_lame(id) 
+public say_blades(id) 
 {
 	if(!(get_user_flags(id) & ACCESS))
 		return PLUGIN_HANDLED;
 	if(g_on == 1)
 	{
-		client_print(id, print_chat, "[ WarCmds ] Meci in desfasurare! Pentru a opri meciul foloseste comanda /stop")		
+		client_print(id, print_chat, "[ WarCmds ] Match in progress! To stop the match use the command /stop")		
 		return PLUGIN_HANDLED;
 	}
-	if(pauza == 1)
+	if(gameBreak == 1)
 	{
-		client_print(id, print_chat, "[ WarCmds ] Meci in desfasurare! Pentru a opri meciul foloseste comanda /stop")		
+		client_print(id, print_chat, "[ WarCmds ] Match in progress! To stop the match use the command /stop")		
 		return PLUGIN_HANDLED;
 	}
 	if(livem == 1)
@@ -310,27 +310,27 @@ public say_lame(id)
 	shalf = 0;
 	tcount = 0;
 	ctcount = 0;
-	suma = 0;
+	sum = 0;
 	sctcount = 0;
 	stcount = 0;
          
-	client_print(0, print_chat, "[ WarCmds ] Runda de lame a inceput!")
-	client_print(0, print_chat, "[ WarCmds ] Aruncati armele in baza!")
+	client_print(0, print_chat, "[ WarCmds ] The round of blades has begun!")
+	client_print(0, print_chat, "[ WarCmds ] Drop your weapons on the base!")
 	return PLUGIN_HANDLED;
 }
 
-public say_alegeri(id)
+public say_elections(id)
 {
 	if(!(get_user_flags(id) & ACCESS))
 		return PLUGIN_HANDLED;
 	if(g_on == 1)
 	{
-		client_print(id, print_chat, "[ WarCmds ] Meci in desfasurare! Pentru a opri meciul foloseste comanda /stop")		
+		client_print(id, print_chat, "[ WarCmds ] Match in progress! To stop the match use the command /stop")		
 		return PLUGIN_HANDLED;
 	}
-	if(pauza == 1)
+	if(gameBreak == 1)
 	{
-		client_print(id, print_chat, "[ WarCmds ] Meci in desfasurare! Pentru a opri meciul foloseste comanda /stop")		
+		client_print(id, print_chat, "[ WarCmds ] Match in progress! To stop the match use the command /stop")		
 		return PLUGIN_HANDLED;
 	}
 	if(livem == 1)
@@ -353,11 +353,11 @@ public say_alegeri(id)
 	shalf = 0;
 	tcount = 0;
 	ctcount = 0;
-	suma = 0;
+	sum = 0;
 	sctcount = 0;
 	stcount = 0;
 	
-        client_print(0, print_chat, "[ WarCmds ] Alegeri! Alegeri! Alegeri!");
+        client_print(0, print_chat, "[ WarCmds ] Elections! Elections! Elections!");
 
 	return PLUGIN_HANDLED;
 }
@@ -399,24 +399,24 @@ public new_round()
 	client_cmd(0,"rate 25000;cl_cmdrate 101;cl_updaterate 101;fps_max 99.5;ex_interp 0.01");
      	if(g_on == 1)
 	{
-    		suma++;
+    		sum++;
     		if(fhalf == 1)
-		{       if(suma > 1)
+		{       if(sum > 1)
 			{
-				if((suma < 16)&&(livem == 0))
+				if((sum < 16)&&(livem == 0))
 				{
-				client_print(0, print_chat, "[ WarCmds ] Scorul este %s: %d %s: %d", tagct, ctcount, tagt, tcount);
+				client_print(0, print_chat, "[ WarCmds ] Score is %s: %d %s: %d", tagct, ctcount, tagt, tcount);
 				}
 			}
-    			if(suma == 15)
+    			if(sum == 15)
 			{
-			client_print(0, print_chat, "[ WarCmds ] Dupa aceasta runda echipele se vor schimba automat! Plugin by GamesZone MIX");
+			client_print(0, print_chat, "[ WarCmds ] After this round the teams will change automatically! Plugin provided by vladpaul10");
 			}
 		
-			if(suma == 16)
+			if(sum == 16)
 			{
-			client_print(0, print_chat, "[ WarCmds ] Prima repriza s-a incheiat!");     
-			client_print(0, print_chat, "[ WarCmds ] Scorul este %s: %d %s: %d", tagt, tcount, tagct, ctcount);
+			client_print(0, print_chat, "[ WarCmds ] The first half is over!");     
+			client_print(0, print_chat, "[ WarCmds ] Score is %s: %d %s: %d", tagt, tcount, tagct, ctcount);
         		warm = 1;
 			g_on = 0;
                         fhalf = 2;
@@ -443,17 +443,17 @@ public new_round()
 
 		if(shalf == 1)
 		{	
-		        if((suma > 17)&&(livem == 0))
+		        if((sum > 17)&&(livem == 0))
 			{
-			client_print(0, print_chat, "[ WarCmds ] Scorul este %s: %d %s: %d", tagt, fctcount, tagct, ftcount);
+			client_print(0, print_chat, "[ WarCmds ] Score is %s: %d %s: %d", tagt, fctcount, tagct, ftcount);
 			}
-                        pauza = 0
+                        gameBreak = 0
 			if(fctcount == 15)
 			{
 				if(ftcount == 15)
 				{			
-				client_print(0, print_chat, "[ WarCmds ] Egal %s vs %s", tagt, tagct);
-				set_task(0.5, "mesaj15");
+				client_print(0, print_chat, "[ WarCmds ] Equal %s vs %s", tagt, tagct);
+				set_task(0.5, "msg15");
 				copy(tagct, 31, ttagct)
 				copy(tagt, 31, ttagt)
         			g_on = 0;
@@ -462,7 +462,7 @@ public new_round()
 				shalf = 0;
 				tcount = 0;
 				ctcount = 0;
-				suma = 0;
+				sum = 0;
 				sctcount = 0;
 				stcount = 0;
 				}
@@ -470,8 +470,8 @@ public new_round()
 	
 			if(fctcount == 16)
 			{
-			client_print(0, print_chat, "[ WarCmds ] Echipa %s a castigat!", tagt);
-			set_task(0.5, "mesaj15");
+			client_print(0, print_chat, "[ WarCmds ] Team %s won!", tagt);
+			set_task(0.5, "msg15");
 			copy(tagct, 31, ttagct)
 			copy(tagt, 31, ttagt)
         		g_on = 0;
@@ -480,15 +480,15 @@ public new_round()
 			shalf = 0;
 			tcount = 0;
 			ctcount = 0;
-			suma = 0;
+			sum = 0;
 			sctcount = 0;
 			stcount = 0;
 			}
 	
 			if(ftcount == 16)
 			{
-			client_print(0, print_chat, "[ WarCmds ] Echipa %s a castigat!", tagct);
-			set_task(0.5, "mesaj15");
+			client_print(0, print_chat, "[ WarCmds ] Team %s won!", tagct);
+			set_task(0.5, "msg15");
 			copy(tagct, 31, ttagct)
 			copy(tagt, 31, ttagt)
         		g_on = 0;
@@ -497,7 +497,7 @@ public new_round()
 			shalf = 0;
 			tcount = 0;
 			ctcount = 0;
-			suma = 0;
+			sum = 0;
 			sctcount = 0;
 			stcount = 0;
 			}
@@ -512,7 +512,7 @@ public new_round()
 	server_cmd("mp_friendlyfire 0");
  
         warm = 0;
-        pauza = 1;
+        gameBreak = 1;
 	}
 	return PLUGIN_CONTINUE;
 }
@@ -522,79 +522,79 @@ public say_score(id)
 {
 	if(fhalf == 1)
 	{
-	client_print(id, print_chat, "[ WarCmds ] Scorul este %s: %d %s: %d", tagct, ctcount, tagt, tcount);    
+	client_print(id, print_chat, "[ WarCmds ] Score is %s: %d %s: %d", tagct, ctcount, tagt, tcount);    
 	}
-	if(pauza == 1)
+	if(gameBreak == 1)
 	{
-	client_print(id, print_chat, "[ WarCmds ] Scorul este %s: %d %s: %d", tagt, tcount,tagct, ctcount);
+	client_print(id, print_chat, "[ WarCmds ] Score is %s: %d %s: %d", tagt, tcount,tagct, ctcount);
 	}
         if(shalf == 1)
 	{
-	client_print(id, print_chat, "[ WarCmds ] Scorul este %s: %d %s: %d", tagt, fctcount, tagct, ftcount);	
+	client_print(id, print_chat, "[ WarCmds ] Score is %s: %d %s: %d", tagt, fctcount, tagct, ftcount);	
         }
 }
 
-public mesaj1() 
+public msg1() 
 {
-	client_print(0, print_chat, "[ WarCmds ] Meciul incepe in... ");
+	client_print(0, print_chat, "[ WarCmds ] The match starts in... ");
 } 
 
-public mesaj2() 
+public msg2() 
 {
 	client_print(0, print_chat, "[ WarCmds ] 3");   
 } 
 
-public mesaj3() 
+public msg3() 
 {
 	client_print(0, print_chat, "[ WarCmds ] 2");       
 } 
-public mesaj4() 
+public msg4() 
 {
 	client_print(0, print_chat, "[ WarCmds ] 1");       
 } 
-public mesaj5() 
+public msg5() 
 {
-	client_print(0, print_chat, "[ WarCmds ] Meciul a inceput!");       
+	client_print(0, print_chat, "[ WarCmds ] The match has started!");       
 } 
-public mesaj6() 
+public msg6() 
 {
 	client_print(0, print_chat, "[ WarCmds ] Good Luck & Have Fun!");       
 } 
-public mesaj7() 
+public msg7() 
 {
-	client_print(0, print_chat, "[ WarCmds ] A doua repriza incepe in...");       
+	client_print(0, print_chat, "[ WarCmds ] The second half begins in...");       
 } 
-public mesaj8() 
+public msg8() 
 {
 	client_print(0, print_chat, "[ WarCmds ] 3");       
 } 
-public mesaj9() 
+public msg9() 
 {
 	client_print(0, print_chat, "[ WarCmds ] 2");       
 } 
-public mesaj10() 
+public msg10() 
 {
 	client_print(0, print_chat, "[ WarCmds ] 1");       
 }
-public mesaj11() 
+public msg11() 
 {
-	client_print(0, print_chat, "[ WarCmds ] A doua repriza a inceput!");       
+	client_print(0, print_chat, "[ WarCmds ] The second half has begun!");       
 }  
-public mesaj12() 
+public msg12() 
 {       
-	suma = 0;
+	sum = 0;
 	server_cmd("sv_restart 1")      
 } 
-public mesaj13() 
+public msg13() 
 {       
-	suma = 16;
+	sum = 16;
 	server_cmd("sv_restart 1")      
 }
-public mesaj14() 
+public msg14() 
 {       
 	livem = 0;    
 }
-public mesaj15() 
+public msg15() 
 {       
 	client_cmd(0,"snapshot");    
 }
