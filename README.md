@@ -1,43 +1,38 @@
 # Warcmds
 
-Counter-Strike 1.6 - AMX MOD X plugin to control matchmaking 
+Warcmds is an AMX MOD X plugin designed for Counter-Strike 1.6 to enhance matchmaking control within the game.
 
-I started this project when I was in high school because of my passion for online games. I launched the first version in the ninth grade and the development of the plugin took about 1 year, tested on 5-10 competitive servers. I have improved the plugin according to the needs of the players.
-
-I think this plugin was my first step on the road to software engineering.
-
-
+I initiated this project during my high school years out of my passion for online gaming. The first version was launched in the ninth grade, and over the course of a year, I developed and tested the plugin on 5-10 competitive servers. I continually refined the plugin based on player feedback, making it a significant milestone in my journey into software engineering.
 
 ## Installation
 
-Copy the amxmodx directory to the addons path
+To install Warcmds, follow these steps:
 
-[Online compiler](https://www.amxmodx.org/webcompiler.cgi "AMX Mod X - Half-Life Scripting for Pros!")
+1. Copy the `amxmodx` directory to the `addons` path of your Counter-Strike 1.6 server.
 
+You can also use the [Online Compiler](https://www.amxmodx.org/webcompiler.cgi "AMX Mod X - Half-Life Scripting for Pros!") for convenience.
 
 ## Usage
 
-```C++
-// Chat commands
-	register_clcmd("say /rr","say_restart",ACCESS)
-	register_clcmd("say /restart","say_restart",ACCESS)
-	register_clcmd("say /warm","say_warm",ACCESS)
-	register_clcmd("say /live","say_live",ACCESS)
-	register_clcmd("say /blades","say_blades",ACCESS)
-	register_clcmd("say /elections","say_elections",ACCESS)
-	register_clcmd("say /stop","say_stop",ACCESS)
-	register_clcmd("say /score","say_score")
+Warcmds provides several chat and console commands for in-game management:
 
-// Console commands
-	register_concmd("amx_tagct", "tagctt", ACCESS, "<Tagct> - CT Tag");
-	register_concmd("amx_tagt", "tagtt", ACCESS, "<Tagt> - T Tag");
-```
+### Chat Commands
+- `/rr` or `/restart`: Restart the game.
+- `/warm`: Initiate a warm-up phase.
+- `/live`: Switch to live gameplay.
+- `/blades`: Activate special blades mode.
+- `/elections`: Start in-game elections.
+- `/stop`: Halt ongoing actions.
+- `/score`: Display the current score.
+
+### Console Commands
+- `amx_tagct`: Set the Counter-Terrorist team tag.
+- `amx_tagt`: Set the Terrorist team tag.
 
 ## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
-Please make sure to update tests as appropriate.
+Contributions to Warcmds are welcome! If you have any major changes in mind, please open an issue first to discuss the proposed modifications. Additionally, make sure to update any relevant tests.
 
 ## License
-[
-GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.html)
+
+This project is licensed under the [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.html). Feel free to check the license for details.
